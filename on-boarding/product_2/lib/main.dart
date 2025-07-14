@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:product_2/product.dart';
 import 'package:product_2/product_manager.dart';
+
 void main() {
   ProductManager manager = ProductManager();
   bool running = true;
@@ -27,11 +28,14 @@ void main() {
         stdout.write('Enter price: ');
         double? price = double.tryParse(stdin.readLineSync() ?? '');
 
-        if (name != null && desc != null && price != null) {
+        // Input validation: disallow empty name/description and non-positive price
+        if (name != null && name.isNotEmpty &&
+            desc != null && desc.isNotEmpty &&
+            price != null && price > 0) {
           manager.addProduct(Product(name, desc, price));
-          print(' Product added!');
+          print('Product added!');
         } else {
-          print('Invalid input.');
+          print('Invalid input. Please enter valid name, description, and positive price.');
         }
         break;
 
@@ -42,8 +46,10 @@ void main() {
       case '3':
         stdout.write('Enter product name to search: ');
         String? name = stdin.readLineSync();
-        if (name != null) {
+        if (name != null && name.isNotEmpty) {
           manager.viewSingleProduct(name);
+        } else {
+          print('Invalid input. Please enter a valid product name.');
         }
         break;
 
@@ -60,20 +66,25 @@ void main() {
         stdout.write('Enter new price: ');
         double? newPrice = double.tryParse(stdin.readLineSync() ?? '');
 
-        if (oldName != null && newName != null && newDesc != null && newPrice != null) {
+        if (oldName != null && oldName.isNotEmpty &&
+            newName != null && newName.isNotEmpty &&
+            newDesc != null && newDesc.isNotEmpty &&
+            newPrice != null && newPrice > 0) {
           manager.editProduct(oldName, newName, newDesc, newPrice);
           print("Product edited successfully!");
         } else {
-          print('Invalid input.');
+          print('Invalid input. Please provide valid values for all fields.');
         }
         break;
 
       case '5':
         stdout.write('Enter product name to delete: ');
         String? name = stdin.readLineSync();
-        if (name != null) {
+        if (name != null && name.isNotEmpty) {
           manager.deleteProduct(name);
           print("Product deleted successfully!");
+        } else {
+          print('Invalid input. Please enter a valid product name.');
         }
         break;
 
@@ -83,7 +94,7 @@ void main() {
         break;
 
       default:
-        print('Invalid choice.');
+        print('Invalid choice. Please enter a number between 1 and 6.');
     }
   }
 }

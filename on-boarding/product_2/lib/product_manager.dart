@@ -3,7 +3,14 @@ import 'package:product_2/product.dart';
 class ProductManager {
   List<Product> products = [];
 
-  void addProduct(Product item) {
+   void addProduct(Product item) {
+    // Prevent adding duplicate product names
+    for (var product in products) {
+      if (product.name == item.name) {
+        print('Product with this name already exists.');
+        return;
+      }
+    }
     products.add(item);
   }
 
