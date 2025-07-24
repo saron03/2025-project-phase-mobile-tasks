@@ -50,13 +50,14 @@ lib/
 1. Clone the repository:
 
 ```
-git clone https://github.com/your-username/ecommerce_flutter_app.git
+git clone git@github.com:saron03/2025-project-phase-mobile-tasks.git
 ```
 
 2. Navigate to the project directory:
 
 ```
-cd ecommerce_flutter_app
+cd on-boarding/
+cd navigation_task_7/
 ```
 
 3. Get dependencies:
