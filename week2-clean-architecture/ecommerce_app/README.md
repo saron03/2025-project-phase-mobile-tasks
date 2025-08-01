@@ -1,16 +1,43 @@
-# ecommerce_app
+# eCommerce Mobile App
 
-A new Flutter project.
+This project implements an eCommerce mobile application using **Clean Architecture** and **TDD** practices.
 
-## Getting Started
+## Project Structure
 
-This project is a starting point for a Flutter application.
+```
+->lib/
+    -core/ # Shared utilities and error handling
+    -features/
+        -product/ # eCommerce product module
+            -domain/ # Entities, repositories, and use cases
+            -data/ # Models, datasources, and repository implementations
+            -presentation/ # UI and state management
+->test/ # Unit and widget tests
+```
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Data Flow
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Presentation Layer** → UI calls a **Use Case**.
+2. **Domain Layer** → Use Case interacts with **Repository (abstract)**.
+3. **Data Layer** → Repository implementation calls a **Data Source** (API/local).
+4. **Entities & Models** → Data Source maps JSON to **ProductModel** which extends **Product** (Entity).
+
+## Testing
+
+- Unit tests are located under `test/` and cover models, use cases, and repository behaviors.
+- Run tests using:
+```
+flutter test
+```
+
+## Architecture
+
+* This project follows Uncle Bob's Clean Architecture:
+
+    - Domain: Business rules, entities, and use cases.
+
+    - Data: Repository implementations, API/local data sources.
+
+    - Presentation: Flutter UI and state management (BLoC).
+
