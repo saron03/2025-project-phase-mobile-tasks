@@ -9,7 +9,7 @@ class ProductModel extends Product {
     required super.imageUrl,
   });
 
-  /// Convert JSON -> ProductModel
+  /// Convert JSON -> ProductModel.
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
       id: json['id'] as String,
@@ -21,6 +21,7 @@ class ProductModel extends Product {
   }
 
   /// Convert ProductModel -> JSON
+  /// 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
