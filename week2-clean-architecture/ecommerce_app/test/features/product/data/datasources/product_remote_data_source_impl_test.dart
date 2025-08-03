@@ -1,25 +1,23 @@
-import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/errors/failures.dart';
+import 'package:ecommerce_app/core/utils/api_service.dart';
 import 'package:ecommerce_app/features/product/data/datasources/product_remote_data_source_impl.dart';
 import 'package:ecommerce_app/features/product/data/models/product_model.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
 import 'product_remote_data_source_impl_test.mocks.dart';
-@GenerateMocks([http.Client])
+
+@GenerateMocks([ApiService])
 void main() {
   late ProductRemoteDataSourceImpl dataSource;
-  late MockClient mockHttpClient;
+  late MockApiService mockApiService;
 
   setUp(() {
-    mockHttpClient = MockClient();
-    dataSource = ProductRemoteDataSourceImpl(client: mockHttpClient);
+    mockApiService = MockApiService();
+    dataSource = ProductRemoteDataSourceImpl(apiService: mockApiService);
   });
 
-  const baseUrl = 'https://g5-flutter-learning-path-be.onrender.com/api/v1/products';
   const testProduct = ProductModel(
     id: '1',
     name: 'Test Product',
@@ -36,30 +34,21 @@ void main() {
   };
 
   group('getProduct', () {
-    test('should return ProductModel when the response code is 200', () async {
+    test('should return ProductModel when ApiService returns data', () async {
       // Arrange
-      when(mockHttpClient.get(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response(jsonEncode(testProductJson), 200));
+      when(mockApiService.get('products/1')).thenAnswer((_) async => testProductJson);
 
       // Act
       final result = await dataSource.getProduct('1');
 
       // Assert
-      verify(mockHttpClient.get(
-        Uri.parse('$baseUrl/1'),
-        headers: {'Content-Type': 'application/json'},
-      ));
+      verify(mockApiService.get('products/1'));
       expect(result, testProduct);
     });
 
-    test('should throw ServerFailure when the response code is not 200', () async {
+    test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockHttpClient.get(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response('Not Found', 404));
+      when(mockApiService.get('products/1')).thenThrow(ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.getProduct('1'), throwsA(isA<ServerFailure>()));
@@ -72,33 +61,22 @@ void main() {
   });
 
   group('insertProduct', () {
-    test('should return ProductModel when the response code is 201', () async {
+    test('should return ProductModel when ApiService returns data', () async {
       // Arrange
-      when(mockHttpClient.post(
-        Uri.parse(baseUrl),
-        headers: anyNamed('headers'),
-        body: anyNamed('body'),
-      )).thenAnswer((_) async => http.Response(jsonEncode(testProductJson), 201));
+      when(mockApiService.post('products', testProductJson))
+          .thenAnswer((_) async => testProductJson);
 
       // Act
       final result = await dataSource.insertProduct(testProduct);
 
       // Assert
-      verify(mockHttpClient.post(
-        Uri.parse(baseUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(testProductJson),
-      ));
+      verify(mockApiService.post('products', testProductJson));
       expect(result, testProduct);
     });
 
-    test('should throw ServerFailure when the response code is not 201', () async {
+    test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockHttpClient.post(
-        Uri.parse(baseUrl),
-        headers: anyNamed('headers'),
-        body: anyNamed('body'),
-      )).thenAnswer((_) async => http.Response('Bad Request', 400));
+      when(mockApiService.post('products', testProductJson)).thenThrow(ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.insertProduct(testProduct), throwsA(isA<ServerFailure>()));
@@ -106,33 +84,22 @@ void main() {
   });
 
   group('updateProduct', () {
-    test('should return Unit when the response code is 200', () async {
+    test('should return Unit when ApiService succeeds', () async {
       // Arrange
-      when(mockHttpClient.put(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-        body: anyNamed('body'),
-      )).thenAnswer((_) async => http.Response('', 200));
+      when(mockApiService.put('products/1', testProductJson))
+          .thenAnswer((_) async => {});
 
       // Act
       final result = await dataSource.updateProduct(testProduct);
 
       // Assert
-      verify(mockHttpClient.put(
-        Uri.parse('$baseUrl/1'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(testProductJson),
-      ));
+      verify(mockApiService.put('products/1', testProductJson));
       expect(result, unit);
     });
 
-    test('should throw ServerFailure when the response code is not 200', () async {
+    test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockHttpClient.put(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-        body: anyNamed('body'),
-      )).thenAnswer((_) async => http.Response('Bad Request', 400));
+      when(mockApiService.put('products/1', testProductJson)).thenThrow(ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.updateProduct(testProduct), throwsA(isA<ServerFailure>()));
@@ -140,30 +107,21 @@ void main() {
   });
 
   group('deleteProduct', () {
-    test('should return Unit when the response code is 200', () async {
+    test('should return Unit when ApiService succeeds', () async {
       // Arrange
-      when(mockHttpClient.delete(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response('', 200));
+      when(mockApiService.delete('products/1')).thenAnswer((_) async => {});
 
       // Act
       final result = await dataSource.deleteProduct('1');
 
       // Assert
-      verify(mockHttpClient.delete(
-        Uri.parse('$baseUrl/1'),
-        headers: {'Content-Type': 'application/json'},
-      ));
+      verify(mockApiService.delete('products/1'));
       expect(result, unit);
     });
 
-    test('should throw ServerFailure when the response code is not 200', () async {
+    test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockHttpClient.delete(
-        Uri.parse('$baseUrl/1'),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => http.Response('Not Found', 404));
+      when(mockApiService.delete('products/1')).thenThrow(ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.deleteProduct('1'), throwsA(isA<ServerFailure>()));
