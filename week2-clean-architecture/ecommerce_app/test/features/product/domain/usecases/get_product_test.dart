@@ -31,7 +31,7 @@ void main() {
   test('should get product from repository', () async {
     // Arrange
     when(mockRepository.getProduct(any))
-        .thenAnswer((_) async => Right(testProduct));
+        .thenAnswer((_) async => const Right(testProduct));
 
     // Act
     final result = await usecase('123');
