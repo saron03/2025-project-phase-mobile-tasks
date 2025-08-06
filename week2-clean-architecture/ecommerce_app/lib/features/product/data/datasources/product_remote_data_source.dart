@@ -8,4 +8,5 @@ abstract class ProductRemoteDataSource {
   Future<Unit> updateProduct(Product product);
   Future<Unit> deleteProduct(String id);
   Future<Product> getProduct(String? id);
+  Future<List<Product>> getAllProducts();
 }

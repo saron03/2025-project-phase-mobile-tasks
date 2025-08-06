@@ -24,6 +24,27 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
+  Future<List<ProductModel>> getAllProducts() async {
+    try {
+      final response = await apiService.get('products');
+
+      // If response is wrapped in a "products" key
+      // ignore: unnecessary_type_check
+      final jsonList = response is Map<String, dynamic> 
+          ? response['products'] 
+          : response;
+
+      if (jsonList is List) {
+        return jsonList.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        throw ServerFailure();
+      }
+    } catch (e) {
+      throw ServerFailure();
+    }
+  }
+
+  @override
   Future<ProductModel> insertProduct(Product product) async {
     try {
       final json = await apiService.post('products', (product as ProductModel).toJson());

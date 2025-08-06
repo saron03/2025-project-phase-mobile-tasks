@@ -44,7 +44,17 @@ void main() {
       await dataSource.cacheProducts(testProducts);
 
       // Assert
-      verify(mockSharedPreferences.setStringList(productsKey, testProductsJson));
+      verify(mockSharedPreferences.setStringList(productsKey, testProductsJson)).called(1);
+    });
+
+    test('should throw CacheFailure when SharedPreferences fails', () async {
+      // Arrange
+      when(mockSharedPreferences.setStringList(productsKey, testProductsJson))
+          .thenThrow(Exception());
+
+      // Act & Assert
+      expect(() => dataSource.cacheProducts(testProducts), throwsA(isA<CacheFailure>()));
+      verify(mockSharedPreferences.setStringList(productsKey, testProductsJson)).called(1);
     });
   });
 
@@ -58,7 +68,7 @@ void main() {
       final result = await dataSource.getCachedProducts();
 
       // Assert
-      verify(mockSharedPreferences.getStringList(productsKey));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
       expect(result, testProducts);
     });
 
@@ -68,7 +78,16 @@ void main() {
 
       // Act & Assert
       expect(() => dataSource.getCachedProducts(), throwsA(isA<CacheFailure>()));
-      verify(mockSharedPreferences.getStringList(productsKey));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
+    });
+
+    test('should throw CacheFailure when SharedPreferences fails', () async {
+      // Arrange
+      when(mockSharedPreferences.getStringList(productsKey)).thenThrow(Exception());
+
+      // Act & Assert
+      expect(() => dataSource.getCachedProducts(), throwsA(isA<CacheFailure>()));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
     });
   });
 
@@ -82,7 +101,7 @@ void main() {
       final result = await dataSource.getCachedProduct('1');
 
       // Assert
-      verify(mockSharedPreferences.getStringList(productsKey));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
       expect(result, testProduct);
     });
 
@@ -95,7 +114,7 @@ void main() {
       final result = await dataSource.getCachedProduct('2');
 
       // Assert
-      verify(mockSharedPreferences.getStringList(productsKey));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
       expect(result, null);
     });
 
@@ -107,8 +126,17 @@ void main() {
       final result = await dataSource.getCachedProduct('1');
 
       // Assert
-      verify(mockSharedPreferences.getStringList(productsKey));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
       expect(result, null);
+    });
+
+    test('should throw CacheFailure when SharedPreferences fails', () async {
+      // Arrange
+      when(mockSharedPreferences.getStringList(productsKey)).thenThrow(Exception());
+
+      // Act & Assert
+      expect(() => dataSource.getCachedProduct('1'), throwsA(isA<CacheFailure>()));
+      verify(mockSharedPreferences.getStringList(productsKey)).called(1);
     });
   });
 
@@ -121,7 +149,16 @@ void main() {
       await dataSource.clearCache();
 
       // Assert
-      verify(mockSharedPreferences.remove(productsKey));
+      verify(mockSharedPreferences.remove(productsKey)).called(1);
+    });
+
+    test('should throw CacheFailure when SharedPreferences fails', () async {
+      // Arrange
+      when(mockSharedPreferences.remove(productsKey)).thenThrow(Exception());
+
+      // Act & Assert
+      expect(() => dataSource.clearCache(), throwsA(isA<CacheFailure>()));
+      verify(mockSharedPreferences.remove(productsKey)).called(1);
     });
   });
 }

@@ -87,4 +87,26 @@ class ProductRepositoryImpl implements ProductRepository {
       return Left(ServerFailure());
     }
   }
+  @override
+  Future<Either<Failure, List<Product>>> getAllProducts() async {
+    try {
+      if (await networkInfo.isConnected) {
+        final remoteProducts = await remoteDataSource.getAllProducts(); // List<ProductModel>
+        // Cache all fetched products (explicitly ProductModel)
+        await localDataSource.cacheProducts(
+          remoteProducts.map((p) => p as ProductModel).toList(),
+        );
+        return Right(remoteProducts);
+      } else {
+        final cachedProducts = await localDataSource.getCachedProducts();
+        if (cachedProducts.isNotEmpty) {
+          return Right(cachedProducts);
+        } else {
+          return Left(CacheFailure());
+        }
+      }
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
 }

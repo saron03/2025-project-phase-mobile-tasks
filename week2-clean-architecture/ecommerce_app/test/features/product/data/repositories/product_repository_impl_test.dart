@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/errors/failures.dart';
 import 'package:ecommerce_app/core/platform/netwrok_info.dart';
-import 'package:ecommerce_app/features/product/data/datasources/product_local_data_dource.dart';
+import 'package:ecommerce_app/features/product/data/datasources/product_local_data_dource.dart' show ProductLocalDataSource;
 import 'package:ecommerce_app/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_app/features/product/data/models/product_model.dart';
 import 'package:ecommerce_app/features/product/data/repositories/product_repository_impl.dart';
@@ -39,6 +39,69 @@ void main() {
     price: 100.0,
     imageUrl: 'test.png',
   );
+  final testProductList = [testProduct];
+
+  group('getAllProducts', () {
+    test('fetches from remote and caches when online', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(mockRemoteDataSource.getAllProducts()).thenAnswer((_) async => testProductList);
+      when(mockLocalDataSource.cacheProducts(testProductList)).thenAnswer((_) async => unit);
+
+      // Act
+      final result = await repository.getAllProducts();
+
+      // Assert
+      verify(mockNetworkInfo.isConnected);
+      verify(mockRemoteDataSource.getAllProducts());
+      verify(mockLocalDataSource.cacheProducts(testProductList));
+      expect(result, Right(testProductList));
+    });
+
+    test('fetches from cache when offline', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      when(mockLocalDataSource.getCachedProducts()).thenAnswer((_) async => testProductList);
+
+      // Act
+      final result = await repository.getAllProducts();
+
+      // Assert
+      verify(mockNetworkInfo.isConnected);
+      verify(mockLocalDataSource.getCachedProducts());
+      verifyNever(mockRemoteDataSource.getAllProducts());
+      expect(result, Right(testProductList));
+    });
+
+    test('returns CacheFailure if no cached products when offline', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      when(mockLocalDataSource.getCachedProducts()).thenAnswer((_) async => []);
+
+      // Act
+      final result = await repository.getAllProducts();
+
+      // Assert
+      verify(mockNetworkInfo.isConnected);
+      verify(mockLocalDataSource.getCachedProducts());
+      verifyNever(mockRemoteDataSource.getAllProducts());
+      expect(result, Left(CacheFailure()));
+    });
+
+    test('returns ServerFailure when remote data source throws', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(mockRemoteDataSource.getAllProducts()).thenThrow(ServerFailure());
+
+      // Act
+      final result = await repository.getAllProducts();
+
+      // Assert
+      verify(mockNetworkInfo.isConnected);
+      verify(mockRemoteDataSource.getAllProducts());
+      expect(result, Left(ServerFailure()));
+    });
+  });
 
   group('getProduct', () {
     test('fetches from remote and caches when online', () async {

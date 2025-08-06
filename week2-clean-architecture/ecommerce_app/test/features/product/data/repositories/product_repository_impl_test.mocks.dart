@@ -92,6 +92,14 @@ class MockProductRemoteDataSource extends _i1.Mock
             ),
           )
           as _i5.Future<_i2.Product>);
+
+  @override
+  _i5.Future<List<_i2.Product>> getAllProducts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllProducts, []),
+            returnValue: _i5.Future<List<_i2.Product>>.value(<_i2.Product>[]),
+          )
+          as _i5.Future<List<_i2.Product>>);
 }
 
 /// A class which mocks [ProductLocalDataSource].

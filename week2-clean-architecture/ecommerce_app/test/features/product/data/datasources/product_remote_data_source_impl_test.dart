@@ -32,6 +32,38 @@ void main() {
     'price': 100.0,
     'imageUrl': 'test.png',
   };
+  final testProductList = [testProduct];
+  final testProductListJson = {'products': [testProductJson]}; // Wrap in "products" key
+
+  group('getAllProducts', () {
+    test('should return List<ProductModel> when ApiService returns a valid map with products', () async {
+      // Arrange
+      when(mockApiService.get('products')).thenAnswer((_) async => testProductListJson);
+
+      // Act
+      final result = await dataSource.getAllProducts();
+
+      // Assert
+      verify(mockApiService.get('products'));
+      expect(result, testProductList);
+    });
+
+    test('should throw ServerFailure when ApiService throws', () async {
+      // Arrange
+      when(mockApiService.get('products')).thenThrow(ServerFailure());
+
+      // Act & Assert
+      expect(() => dataSource.getAllProducts(), throwsA(isA<ServerFailure>()));
+    });
+
+    test('should throw ServerFailure when ApiService returns invalid data', () async {
+      // Arrange
+      when(mockApiService.get('products')).thenAnswer((_) async => {'invalid': 'data'});
+
+      // Act & Assert
+      expect(() => dataSource.getAllProducts(), throwsA(isA<ServerFailure>()));
+    });
+  });
 
   group('getProduct', () {
     test('should return ProductModel when ApiService returns data', () async {

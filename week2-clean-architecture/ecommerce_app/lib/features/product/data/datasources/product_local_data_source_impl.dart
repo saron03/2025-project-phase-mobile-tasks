@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:collection/collection.dart'; // Add this import
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/errors/failures.dart';
 import '../models/product_model.dart';
@@ -13,36 +14,52 @@ class ProductLocalDataSourceImpl implements ProductLocalDataSource {
 
   @override
   Future<void> cacheProducts(List<ProductModel> products) async {
-    final List<String> productsJson =
-        products.map((product) => json.encode(product.toJson())).toList();
-    await sharedPreferences.setStringList(productsKey, productsJson);
+    try {
+      final List<String> productsJson =
+          products.map((product) => json.encode(product.toJson())).toList();
+      await sharedPreferences.setStringList(productsKey, productsJson);
+    } catch (e) {
+      throw const CacheFailure();
+    }
   }
 
   @override
   Future<List<ProductModel>> getCachedProducts() async {
-    final List<String>? productsJson = sharedPreferences.getStringList(productsKey);
-    if (productsJson != null) {
-      return productsJson
-          .map((jsonString) => ProductModel.fromJson(json.decode(jsonString)))
-          .toList();
+    try {
+      final List<String>? productsJson = sharedPreferences.getStringList(productsKey);
+      if (productsJson != null) {
+        return productsJson
+            .map((jsonString) => ProductModel.fromJson(json.decode(jsonString)))
+            .toList();
+      }
+      throw const CacheFailure();
+    } catch (e) {
+      throw const CacheFailure();
     }
-    throw CacheFailure();
   }
 
   @override
   Future<ProductModel?> getCachedProduct(String id) async {
-    final List<String>? productsJson = sharedPreferences.getStringList(productsKey);
-    if (productsJson != null) {
-      final products = productsJson
-          .map((jsonString) => ProductModel.fromJson(json.decode(jsonString)))
-          .toList();
-      return products.firstWhereOrNull((product) => product.id == id);
+    try {
+      final List<String>? productsJson = sharedPreferences.getStringList(productsKey);
+      if (productsJson != null) {
+        final products = productsJson
+            .map((jsonString) => ProductModel.fromJson(json.decode(jsonString)))
+            .toList();
+        return products.firstWhereOrNull((product) => product.id == id);
+      }
+      return null;
+    } catch (e) {
+      throw const CacheFailure();
     }
-    return null;
   }
 
   @override
   Future<void> clearCache() async {
-    await sharedPreferences.remove(productsKey);
+    try {
+      await sharedPreferences.remove(productsKey);
+    } catch (e) {
+      throw const CacheFailure();
+    }
   }
 }
