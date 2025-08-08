@@ -50,7 +50,7 @@ class ApiService {
       }
       return {};
     } else {
-      throw ServerFailure();
+      throw const ServerFailure();
     }
   }
 }

@@ -85,13 +85,13 @@ void main() {
       verify(mockNetworkInfo.isConnected);
       verify(mockLocalDataSource.getCachedProducts());
       verifyNever(mockRemoteDataSource.getAllProducts());
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure()));
     });
 
     test('returns ServerFailure when remote data source throws', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.getAllProducts()).thenThrow(ServerFailure());
+      when(mockRemoteDataSource.getAllProducts()).thenThrow(const ServerFailure());
 
       // Act
       final result = await repository.getAllProducts();
@@ -99,7 +99,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected);
       verify(mockRemoteDataSource.getAllProducts());
-      expect(result, Left(ServerFailure()));
+      expect(result, const Left(ServerFailure()));
     });
   });
 
@@ -147,7 +147,7 @@ void main() {
       verify(mockNetworkInfo.isConnected);
       verify(mockLocalDataSource.getCachedProduct(testId));
       verifyNever(mockRemoteDataSource.getProduct(testId));
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure()));
     });
   });
 
@@ -178,7 +178,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected);
       verifyNever(mockRemoteDataSource.insertProduct(testProduct));
-      expect(result, Left(NetworkFailure()));
+      expect(result, const Left(NetworkFailure()));
     });
   });
 
@@ -209,7 +209,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected);
       verifyNever(mockRemoteDataSource.updateProduct(testProduct));
-      expect(result, Left(NetworkFailure()));
+      expect(result, const Left(NetworkFailure()));
     });
   });
 
@@ -240,7 +240,7 @@ void main() {
       // Assert
       verify(mockNetworkInfo.isConnected);
       verifyNever(mockRemoteDataSource.deleteProduct(testId));
-      expect(result, Left(NetworkFailure()));
+      expect(result, const Left(NetworkFailure()));
     });
   });
 }

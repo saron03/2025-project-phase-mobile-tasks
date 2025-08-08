@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/errors/failures.dart';
-import 'package:ecommerce_app/core/utils/api_service.dart';
+import 'package:ecommerce_app/core/utils/product_api_service.dart';
 import 'package:ecommerce_app/features/product/data/datasources/product_remote_data_source_impl.dart';
 import 'package:ecommerce_app/features/product/data/models/product_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -50,7 +50,7 @@ void main() {
 
     test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockApiService.get('products')).thenThrow(ServerFailure());
+      when(mockApiService.get('products')).thenThrow(const ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.getAllProducts(), throwsA(isA<ServerFailure>()));
@@ -80,7 +80,7 @@ void main() {
 
     test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockApiService.get('products/1')).thenThrow(ServerFailure());
+      when(mockApiService.get('products/1')).thenThrow(const ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.getProduct('1'), throwsA(isA<ServerFailure>()));
@@ -108,7 +108,7 @@ void main() {
 
     test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockApiService.post('products', testProductJson)).thenThrow(ServerFailure());
+      when(mockApiService.post('products', testProductJson)).thenThrow(const ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.insertProduct(testProduct), throwsA(isA<ServerFailure>()));
@@ -131,7 +131,7 @@ void main() {
 
     test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockApiService.put('products/1', testProductJson)).thenThrow(ServerFailure());
+      when(mockApiService.put('products/1', testProductJson)).thenThrow(const ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.updateProduct(testProduct), throwsA(isA<ServerFailure>()));
@@ -153,7 +153,7 @@ void main() {
 
     test('should throw ServerFailure when ApiService throws', () async {
       // Arrange
-      when(mockApiService.delete('products/1')).thenThrow(ServerFailure());
+      when(mockApiService.delete('products/1')).thenThrow(const ServerFailure());
 
       // Act & Assert
       expect(() => dataSource.deleteProduct('1'), throwsA(isA<ServerFailure>()));
