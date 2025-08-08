@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/utils/input_converter.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ecommerce_app/core/errors/failures.dart';
 
 void main() {
   late InputConverter inputConverter;

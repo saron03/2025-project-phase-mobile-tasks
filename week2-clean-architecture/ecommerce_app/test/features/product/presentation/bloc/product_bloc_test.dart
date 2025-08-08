@@ -81,13 +81,13 @@ void main() {
       blocTest<ProductBloc, ProductState>(
         'should emit [LoadingState, ErrorState] when getAllProducts fails',
         build: () {
-          when(mockGetAllProducts()).thenAnswer((_) async => Left(ServerFailure()));
+          when(mockGetAllProducts()).thenAnswer((_) async => const Left(ServerFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const LoadAllProductEvent()),
         expect: () => [
           LoadingState(),
-          ErrorState(ServerFailure().message),
+          ErrorState(const ServerFailure().message),
         ],
         verify: (_) {
           verify(mockGetAllProducts()).called(1);
@@ -107,7 +107,7 @@ void main() {
         act: (bloc) => bloc.add(const GetSingleProductEvent(testId)),
         expect: () => [
           LoadingState(),
-          LoadedSingleProductState(testProduct),
+          const LoadedSingleProductState(testProduct),
         ],
         verify: (_) {
           verify(mockInputConverter.stringToUnsignedInteger(testId)).called(1);
@@ -119,7 +119,7 @@ void main() {
         'should emit [LoadingState, ErrorState] when inputConverter fails',
         build: () {
           when(mockInputConverter.stringToUnsignedInteger(invalidId))
-              .thenReturn(Left(InvalidInputFailure()));
+              .thenReturn(const Left(InvalidInputFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const GetSingleProductEvent(invalidId)),
@@ -138,13 +138,13 @@ void main() {
         build: () {
           when(mockInputConverter.stringToUnsignedInteger(testId))
               .thenReturn(const Right(1));
-          when(mockGetProduct(any)).thenAnswer((_) async => Left(ServerFailure()));
+          when(mockGetProduct(any)).thenAnswer((_) async => const Left(ServerFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const GetSingleProductEvent(testId)),
         expect: () => [
           LoadingState(),
-          ErrorState(ServerFailure().message),
+          ErrorState(const ServerFailure().message),
         ],
         verify: (_) {
           verify(mockInputConverter.stringToUnsignedInteger(testId)).called(1);
@@ -173,13 +173,13 @@ void main() {
       blocTest<ProductBloc, ProductState>(
         'should emit [LoadingState, ErrorState] when insertProduct fails',
         build: () {
-          when(mockInsertProduct(any)).thenAnswer((_) async => Left(ServerFailure()));
+          when(mockInsertProduct(any)).thenAnswer((_) async => const Left(ServerFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const InsertProductEvent(testProduct)),
         expect: () => [
           LoadingState(),
-          ErrorState(ServerFailure().message),
+          ErrorState(const ServerFailure().message),
         ],
         verify: (_) {
           verify(mockInsertProduct(testProduct)).called(1);
@@ -207,13 +207,13 @@ void main() {
       blocTest<ProductBloc, ProductState>(
         'should emit [LoadingState, ErrorState] when updateProduct fails',
         build: () {
-          when(mockUpdateProduct(any)).thenAnswer((_) async => Left(ServerFailure()));
+          when(mockUpdateProduct(any)).thenAnswer((_) async => const Left(ServerFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const UpdateProductEvent(testProduct)),
         expect: () => [
           LoadingState(),
-          ErrorState(ServerFailure().message),
+          ErrorState(const ServerFailure().message),
         ],
         verify: (_) {
           verify(mockUpdateProduct(testProduct)).called(1);
@@ -241,13 +241,13 @@ void main() {
       blocTest<ProductBloc, ProductState>(
         'should emit [LoadingState, ErrorState] when deleteProduct fails',
         build: () {
-          when(mockDeleteProduct(any)).thenAnswer((_) async => Left(ServerFailure()));
+          when(mockDeleteProduct(any)).thenAnswer((_) async => const Left(ServerFailure()));
           return bloc;
         },
         act: (bloc) => bloc.add(const DeleteProductEvent(testId)),
         expect: () => [
           LoadingState(),
-          ErrorState(ServerFailure().message),
+          ErrorState(const ServerFailure().message),
         ],
         verify: (_) {
           verify(mockDeleteProduct(testId)).called(1);

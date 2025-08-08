@@ -32,11 +32,11 @@ class ProductRepositoryImpl implements ProductRepository {
         if (cachedProduct != null) {
           return Right(cachedProduct);
         } else {
-          return Left(CacheFailure());
+          return const Left(CacheFailure());
         }
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 
@@ -49,10 +49,10 @@ class ProductRepositoryImpl implements ProductRepository {
         await localDataSource.cacheProducts([remoteProduct as ProductModel]);
         return Right(remoteProduct);
       } else {
-        return Left(NetworkFailure());
+        return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 
@@ -65,10 +65,10 @@ class ProductRepositoryImpl implements ProductRepository {
         await localDataSource.cacheProducts([product as ProductModel]);
         return Right(result);
       } else {
-        return Left(NetworkFailure());
+        return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 
@@ -81,10 +81,10 @@ class ProductRepositoryImpl implements ProductRepository {
         await localDataSource.clearCache();
         return Right(result);
       } else {
-        return Left(NetworkFailure());
+        return const Left(NetworkFailure());
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
   @override
@@ -102,11 +102,11 @@ class ProductRepositoryImpl implements ProductRepository {
         if (cachedProducts.isNotEmpty) {
           return Right(cachedProducts);
         } else {
-          return Left(CacheFailure());
+          return const Left(CacheFailure());
         }
       }
     } catch (e) {
-      return Left(ServerFailure());
+      return const Left(ServerFailure());
     }
   }
 }

@@ -47,13 +47,13 @@ void main() {
     test('should return ServerFailure when repository fails with ServerFailure', () async {
       // Arrange
       when(mockRepository.getProduct(any))
-          .thenAnswer((_) async => Left(ServerFailure()));
+          .thenAnswer((_) async => const Left(ServerFailure()));
 
       // Act
       final result = await usecase(testId);
 
       // Assert
-      expect(result, Left(ServerFailure()));
+      expect(result, const Left(ServerFailure()));
       verify(mockRepository.getProduct(testId)).called(1);
       verifyNoMoreInteractions(mockRepository);
     });
@@ -61,13 +61,13 @@ void main() {
     test('should return CacheFailure when repository fails with CacheFailure', () async {
       // Arrange
       when(mockRepository.getProduct(any))
-          .thenAnswer((_) async => Left(CacheFailure()));
+          .thenAnswer((_) async => const Left(CacheFailure()));
 
       // Act
       final result = await usecase(testId);
 
       // Assert
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure()));
       verify(mockRepository.getProduct(testId)).called(1);
       verifyNoMoreInteractions(mockRepository);
     });
