@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class AuthTextLink extends StatelessWidget {
@@ -16,17 +15,19 @@ class AuthTextLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: RichText(
-        text: TextSpan(
-          text: text,
-          style: const TextStyle(color: Colors.grey),
-          children: [
-            TextSpan(
-              text: linkText,
-              style: const TextStyle(color: Color(0xFF4A5CF4), fontWeight: FontWeight.bold),
-              recognizer: TapGestureRecognizer()..onTap = onTap,
-            ),
-          ],
+      child: GestureDetector(
+        onTap: onTap,
+        child: RichText(
+          text: TextSpan(
+            text: text,
+            style: const TextStyle(color: Colors.grey),
+            children: [
+              TextSpan(
+                text: linkText,
+                style: const TextStyle(color: Color(0xFF4A5CF4), fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -23,8 +23,6 @@ class _SignUpPageState extends State<SignUpPage> {
   bool isChecked = false;
 
   void _logoutAndGoBack() {
-    // Add your logout logic here if needed (e.g. clearing tokens, auth state)
-    // Then navigate back to sign-in page
     context.read<AuthBloc>().add(LogoutEvent());
     context.go('/sign-in');
   }
@@ -58,8 +56,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF4A5CF4)),
                         onPressed: _logoutAndGoBack,
                       ),
-
-                      // ECOM in box with border and CaveatBrush font
                       Material(
                         elevation: 4,
                         borderRadius: BorderRadius.circular(12),
@@ -87,7 +83,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
                   const SizedBox(height: 40),
 
-                  // Center the rest vertically and horizontally
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -207,7 +202,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                               name: name,
                                               email: email,
                                               password: password,
-                                              id: '', // adjust if needed
+                                              id: '',
                                             ),
                                           );
                                     }
@@ -218,10 +213,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
                           const SizedBox(height: 20),
 
-                          AuthTextLink(
-                            text: 'Have an account? ',
-                            linkText: 'SIGN IN',
-                            onTap: () => context.go('/sign-in'),
+                          // Wrap AuthTextLink in Builder to ensure correct BuildContext
+                          Builder(
+                            builder: (BuildContext context) {
+                              return AuthTextLink(
+                                text: 'Have an account? ',
+                                linkText: 'SIGN IN',
+                                onTap: () {
+                                  debugPrint('AuthTextLink tapped, navigating to /sign-in');
+                                  context.go('/sign-in');
+                                },
+                              );
+                            },
                           ),
 
                           const SizedBox(height: 20),

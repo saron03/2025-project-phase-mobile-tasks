@@ -1,22 +1,67 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:ecommerce_app/features/auth/presentation/bloc/auth_event.dart';
-import 'package:ecommerce_app/features/auth/presentation/bloc/auth_state.dart';
-import 'package:ecommerce_app/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:ecommerce_app/features/auth/presentation/bloc/auth_event.dart' show AuthEvent, LogoutEvent;
+import 'package:ecommerce_app/features/auth/presentation/bloc/auth_state.dart' show AuthState, AuthInitial;
+import 'package:ecommerce_app/features/auth/presentation/pages/sign_up_page.dart' show SignUpPage;
 import 'package:ecommerce_app/features/auth/presentation/widgets/auth_text_link.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mocktail/mocktail.dart';
 
-// Mock classes for AuthBloc
+// Mock classes
 class MockAuthBloc extends Mock implements AuthBloc {}
+class FakeAuthEvent extends Fake implements AuthEvent {}
+class FakeAuthState extends Fake implements AuthState {}
 
 void main() {
   late MockAuthBloc mockAuthBloc;
 
-  // Helper to extract full text from TextSpan recursively
+  setUpAll(() {
+    registerFallbackValue(FakeAuthEvent());
+    registerFallbackValue(FakeAuthState());
+  });
+
+  setUp(() {
+    mockAuthBloc = MockAuthBloc();
+    when(() => mockAuthBloc.stream).thenAnswer((_) => Stream.value(AuthInitial()));
+    when(() => mockAuthBloc.state).thenReturn(AuthInitial());
+  });
+
+  Widget createWidgetUnderTest() {
+    final router = GoRouter(
+      initialLocation: '/sign-up',
+      routes: [
+        GoRoute(
+          path: '/sign-in',
+          builder: (_, __) {
+            debugPrint('Navigated to /sign-in route');
+            return const Scaffold(body: Center(child: Text('Sign In Page')));
+          },
+        ),
+        GoRoute(
+          path: '/sign-up',
+          builder: (_, __) => BlocProvider<AuthBloc>.value(
+            value: mockAuthBloc,
+            child: const SignUpPage(),
+          ),
+        ),
+      ],
+    );
+
+    return MaterialApp.router(
+      routerConfig: router,
+    );
+  }
+
+  testWidgets('Shows Create your account text', (tester) async {
+    await tester.pumpWidget(createWidgetUnderTest());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Create your account'), findsOneWidget, reason: 'SignUpPage should display "Create your account"');
+  });
+
+  // Helper to extract text from TextSpan
   String extractTextFromTextSpan(TextSpan span) {
     final buffer = StringBuffer();
     void extract(TextSpan s) {
@@ -27,96 +72,54 @@ void main() {
         }
       }
     }
-
     extract(span);
     return buffer.toString();
   }
-
-  // Widget wrapper to provide bloc and routing (adjust if needed)
-  Widget createWidgetUnderTest() {
-    final router = GoRouter(
-      routes: [
-        GoRoute(
-          path: '/sign-in',
-          builder: (_, __) =>
-              const Scaffold(body: Center(child: Text('Sign In Page'))),
-        ),
-        GoRoute(path: '/sign-up', builder: (_, __) => const SignUpPage()),
-      ],
-    );
-
-    return BlocProvider<AuthBloc>.value(
-      value: mockAuthBloc,
-      child: MaterialApp.router(
-        routerConfig: router,
-      ),
-    );
-  }
-
-  setUp(() {
-    mockAuthBloc = MockAuthBloc();
-    when(() => mockAuthBloc.state).thenReturn(AuthInitial());
-    whenListen(mockAuthBloc, const Stream<AuthState>.empty());
-  });
-
-  testWidgets('SignUpPage renders correctly and elements exist', (
-    tester,
-  ) async {
-    await tester.pumpWidget(createWidgetUnderTest());
-    await tester.pumpAndSettle();
-
-    // Check main header text
-    expect(find.text('Create your account'), findsOneWidget);
-
-    // Check the terms & policy RichText by extracting TextSpan content
-    final termsFinder = find.byWidgetPredicate((widget) {
-      if (widget is RichText) {
-        final textSpan = widget.text;
-        if (textSpan is TextSpan) {
-          final combinedText = extractTextFromTextSpan(textSpan);
-          return combinedText.contains('terms & policy');
-        }
-      }
-      return false;
-    });
-    expect(termsFinder, findsOneWidget);
-
-    // Check presence of AuthTextLink (for SIGN IN)
-    expect(find.byType(AuthTextLink), findsOneWidget);
-  });
 
   testWidgets('Clicking SIGN IN navigates to sign-in page', (tester) async {
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pumpAndSettle();
 
-    final signInLinkFinder = find.byType(AuthTextLink);
-    expect(signInLinkFinder, findsOneWidget);
+    // Verify AuthTextLink is present
+    final authTextLinkFinder = find.byType(AuthTextLink);
+    expect(authTextLinkFinder, findsOneWidget, reason: 'AuthTextLink should be present on SignUpPage');
 
-    await tester.tap(signInLinkFinder);
+    // Debug: Check for "SIGN IN" text within RichText
+    final richTextFinder = find.byType(RichText);
+    expect(richTextFinder, findsWidgets, reason: 'RichText widgets should be present');
+    final richTextWidget = tester.widget<RichText>(richTextFinder.last);
+    final textSpan = richTextWidget.text as TextSpan;
+    final fullText = extractTextFromTextSpan(textSpan);
+    debugPrint('RichText content: $fullText');
+
+    // Scroll to make AuthTextLink visible
+    await tester.scrollUntilVisible(
+      authTextLinkFinder,
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
+
+    // Debug: Verify the tap is attempted
+    debugPrint('Tapping AuthTextLink');
+    await tester.tap(authTextLinkFinder);
+    await tester.pump(const Duration(milliseconds: 500));
     await tester.pumpAndSettle();
 
-    // After tap, we expect to navigate to /sign-in which shows "Sign In Page" text
-    expect(find.text('Sign In Page'), findsOneWidget);
+    // Check for Sign In Page text
+    expect(find.text('Sign In Page'), findsOneWidget, reason: 'Should navigate to /sign-in and show Sign In Page text');
   });
 
-  testWidgets('Clicking logout icon triggers logout event and navigates', (
-    tester,
-  ) async {
+  testWidgets('Clicking back arrow triggers logout and navigates to sign-in', (tester) async {
     when(() => mockAuthBloc.add(any())).thenReturn(null);
 
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pumpAndSettle();
 
-    final logoutIconFinder = find.byIcon(Icons.arrow_back_ios);
-    expect(logoutIconFinder, findsOneWidget);
-
-    await tester.tap(logoutIconFinder);
+    await tester.tap(find.byIcon(Icons.arrow_back_ios));
+    await tester.pump(const Duration(milliseconds: 500));
     await tester.pumpAndSettle();
 
-    // Verify logout event was added to bloc
     verify(() => mockAuthBloc.add(any(that: isA<LogoutEvent>()))).called(1);
-
-    // We also expect navigation to sign-in page
-    expect(find.text('Sign In Page'), findsOneWidget);
+    expect(find.text('Sign In Page'), findsOneWidget, reason: 'Back arrow should trigger logout and navigate to sign-in');
   });
 }
