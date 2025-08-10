@@ -65,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final token = prefs.getString('auth_token');
       debugPrint('Auth token: $token');
       if (token != null && token.isNotEmpty) {
-        final user = User(id: 'placeholder_id', name: 'Placeholder User', email: 'placeholder@example.com');
+        final user = const User(id: 'placeholder_id', name: 'Placeholder User', email: 'placeholder@example.com');
         emit(AuthAuthenticated(user));
       } else {
         emit(AuthUnauthenticated());

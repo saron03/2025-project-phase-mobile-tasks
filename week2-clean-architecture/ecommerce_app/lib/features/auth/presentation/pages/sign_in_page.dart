@@ -47,7 +47,7 @@ class SignInPage extends StatelessWidget {
                         border: Border.all(color: const Color(0xFF4A5CF4), width: 2),
                       ),
                       child: const Text(
-                        "ECOM",
+                        'ECOM',
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class SignInPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const Text(
-                          "Sign into your account",
+                          'Sign into your account',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 22,
@@ -80,7 +80,7 @@ class SignInPage extends StatelessWidget {
 
                         // Label + input for Email
                         const Text(
-                          "Email",
+                          'Email',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -88,15 +88,15 @@ class SignInPage extends StatelessWidget {
                         ),
                         AuthTextField(
                           controller: emailController,
-                          labelText: "",  // label handled above
-                          hintText: "ex: jon.smith@email.com",
+                          labelText: '',  // label handled above
+                          hintText: 'ex: jon.smith@email.com',
                         ),
 
                         const SizedBox(height: 20),
 
                         // Label + input for Password
                         const Text(
-                          "Password",
+                          'Password',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -104,8 +104,8 @@ class SignInPage extends StatelessWidget {
                         ),
                         AuthTextField(
                           controller: passwordController,
-                          labelText: "", // label handled above
-                          hintText: "********",
+                          labelText: '', // label handled above
+                          hintText: '********',
                           obscureText: true,
                         ),
 
@@ -124,14 +124,14 @@ class SignInPage extends StatelessWidget {
                                   }
                                 },
                           isLoading: state is AuthLoading,
-                          text: "SIGN IN",
+                          text: 'SIGN IN',
                         ),
 
                         const Spacer(),
 
                         AuthTextLink(
-                          text: "Don’t have an account? ",
-                          linkText: "SIGN UP",
+                          text: 'Don’t have an account? ',
+                          linkText: 'SIGN UP',
                           onTap: () => context.go('/sign-up'),
                         ),
 
