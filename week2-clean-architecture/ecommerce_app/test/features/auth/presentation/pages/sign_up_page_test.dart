@@ -17,7 +17,7 @@ void main() {
   late MockAuthBloc mockAuthBloc;
 
   // Helper to extract full text from TextSpan recursively
-  String _extractTextFromTextSpan(TextSpan span) {
+  String extractTextFromTextSpan(TextSpan span) {
     final buffer = StringBuffer();
     void extract(TextSpan s) {
       if (s.text != null) buffer.write(s.text);
@@ -41,7 +41,7 @@ void main() {
           builder: (_, __) =>
               const Scaffold(body: Center(child: Text('Sign In Page'))),
         ),
-        GoRoute(path: '/sign-up', builder: (_, __) => SignUpPage()),
+        GoRoute(path: '/sign-up', builder: (_, __) => const SignUpPage()),
       ],
     );
 
@@ -73,7 +73,7 @@ void main() {
       if (widget is RichText) {
         final textSpan = widget.text;
         if (textSpan is TextSpan) {
-          final combinedText = _extractTextFromTextSpan(textSpan);
+          final combinedText = extractTextFromTextSpan(textSpan);
           return combinedText.contains('terms & policy');
         }
       }

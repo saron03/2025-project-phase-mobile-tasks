@@ -71,7 +71,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             border: Border.all(color: const Color(0xFF4A5CF4), width: 2),
                           ),
                           child: const Text(
-                            "ECOM",
+                            'ECOM',
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const Text(
-                            "Create your account",
+                            'Create your account',
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                           ),
@@ -103,39 +103,39 @@ class _SignUpPageState extends State<SignUpPage> {
 
                           // Name Label + Input
                           const Text(
-                            "Name",
+                            'Name',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           AuthTextField(
                             controller: nameController,
-                            labelText: "",
-                            hintText: "ex: jon smith",
+                            labelText: '',
+                            hintText: 'ex: jon smith',
                           ),
 
                           const SizedBox(height: 20),
 
                           // Email Label + Input
                           const Text(
-                            "Email",
+                            'Email',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           AuthTextField(
                             controller: emailController,
-                            labelText: "",
-                            hintText: "ex: jon.smith@email.com",
+                            labelText: '',
+                            hintText: 'ex: jon.smith@email.com',
                           ),
 
                           const SizedBox(height: 20),
 
                           // Password Label + Input
                           const Text(
-                            "Password",
+                            'Password',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           AuthTextField(
                             controller: passwordController,
-                            labelText: "",
-                            hintText: "********",
+                            labelText: '',
+                            hintText: '********',
                             obscureText: true,
                           ),
 
@@ -143,13 +143,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
                           // Confirm Password Label + Input
                           const Text(
-                            "Confirm password",
+                            'Confirm password',
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           AuthTextField(
                             controller: confirmPasswordController,
-                            labelText: "",
-                            hintText: "********",
+                            labelText: '',
+                            hintText: '********',
                             obscureText: true,
                           ),
 
@@ -168,11 +168,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               Expanded(
                                 child: RichText(
                                   text: const TextSpan(
-                                    text: "I understood the ",
+                                    text: 'I understood the ',
                                     style: TextStyle(color: Colors.black),
                                     children: [
                                       TextSpan(
-                                        text: "terms & policy.",
+                                        text: 'terms & policy.',
                                         style: TextStyle(
                                           color: Color(0xFF4A5CF4),
                                           fontWeight: FontWeight.bold,
@@ -207,20 +207,20 @@ class _SignUpPageState extends State<SignUpPage> {
                                               name: name,
                                               email: email,
                                               password: password,
-                                              id: "", // adjust if needed
+                                              id: '', // adjust if needed
                                             ),
                                           );
                                     }
                                   },
                             isLoading: state is AuthLoading,
-                            text: "SIGN UP",
+                            text: 'SIGN UP',
                           ),
 
                           const SizedBox(height: 20),
 
                           AuthTextLink(
-                            text: "Have an account? ",
-                            linkText: "SIGN IN",
+                            text: 'Have an account? ',
+                            linkText: 'SIGN IN',
                             onTap: () => context.go('/sign-in'),
                           ),
 

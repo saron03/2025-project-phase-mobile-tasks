@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class AuthApiService {
   final http.Client client;
 
-  static const String baseUrl = 'https://g5-flutter-learning-path-be.onrender.com/api/v2/auth/';
+  static const String baseUrl = 'https://g5-flutter-learning-path-be-tvum.onrender.com/';
 
   AuthApiService({required this.client});
 

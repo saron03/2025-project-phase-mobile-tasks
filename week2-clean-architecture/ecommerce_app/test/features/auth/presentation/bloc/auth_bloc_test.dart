@@ -170,7 +170,7 @@ void main() {
     group('LogoutEvent', () {
       test('emits [AuthLoading, AuthUnauthenticated] when logout is successful', () async {
         // Arrange
-        when(() => mockLogout()).thenAnswer((_) async => null);
+        when(() => mockLogout()).thenAnswer((_) async {});
 
         // Act
         authBloc.add(LogoutEvent());

@@ -1,7 +1,7 @@
 import 'package:ecommerce_app/features/auth/domain/entities/user.dart';
-import 'package:test/test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:ecommerce_app/features/auth/presentation/bloc/auth_state.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:test/test.dart';
 
 
 // Mock User class for testing
