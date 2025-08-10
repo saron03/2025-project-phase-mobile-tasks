@@ -44,14 +44,12 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
     required String? name,
     required String? email,
     required String? password,
-    required String? id,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#signUp, [], {
               #name: name,
               #email: email,
               #password: password,
-              #id: id,
             }),
             returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.User>>.value(
               _FakeEither_0<_i5.Failure, _i6.User>(
@@ -60,7 +58,6 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
                   #name: name,
                   #email: email,
                   #password: password,
-                  #id: id,
                 }),
               ),
             ),

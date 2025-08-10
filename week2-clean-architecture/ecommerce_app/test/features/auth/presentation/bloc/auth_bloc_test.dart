@@ -130,11 +130,11 @@ void main() {
         when(() => mockUser.id).thenReturn(id);
         when(() => mockUser.name).thenReturn(name);
         when(() => mockUser.email).thenReturn(email);
-        when(() => mockSignUp(name: name, email: email, password: password, id: id))
+        when(() => mockSignUp(name: name, email: email, password: password))
             .thenAnswer((_) async => Right(mockUser));
 
         // Act
-        authBloc.add(SignUpEvent(name: name, email: email, password: password, id: id));
+        authBloc.add(SignUpEvent(name: name, email: email, password: password));
 
         // Assert
         await expectLater(
@@ -149,11 +149,11 @@ void main() {
 
       test('emits [AuthLoading, AuthError] when sign up fails with NetworkFailure', () async {
         // Arrange
-        when(() => mockSignUp(name: name, email: email, password: password, id: id))
+        when(() => mockSignUp(name: name, email: email, password: password))
             .thenAnswer((_) async => Left(mockNetworkFailure));
 
         // Act
-        authBloc.add(SignUpEvent(name: name, email: email, password: password, id: id));
+        authBloc.add(SignUpEvent(name: name, email: email, password: password));
 
         // Assert
         await expectLater(

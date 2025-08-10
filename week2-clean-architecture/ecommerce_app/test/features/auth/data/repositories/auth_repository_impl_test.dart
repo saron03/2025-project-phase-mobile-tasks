@@ -86,12 +86,11 @@ void main() {
     const tName = 'Test User';
     const tEmail = 'test@example.com';
     const tPassword = '123456';
-    const tId = '1';
 
     test('should return User when network is connected and signUp is successful', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.signUp(tName, tEmail, tPassword, tId))
+      when(mockRemoteDataSource.signUp(tName, tEmail, tPassword))
           .thenAnswer((_) async => tUser);
 
       // Act
@@ -99,13 +98,12 @@ void main() {
         name: tName,
         email: tEmail,
         password: tPassword,
-        id: tId,
       );
 
       // Assert
       expect(result, Right(tUser));
       verify(mockNetworkInfo.isConnected);
-      verify(mockRemoteDataSource.signUp(tName, tEmail, tPassword, tId));
+      verify(mockRemoteDataSource.signUp(tName, tEmail, tPassword));
       verifyNoMoreInteractions(mockNetworkInfo);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });
@@ -119,7 +117,6 @@ void main() {
         name: tName,
         email: tEmail,
         password: tPassword,
-        id: tId,
       );
 
       // Assert
@@ -132,20 +129,19 @@ void main() {
     test('should return ServerFailure when an exception occurs', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.signUp(tName, tEmail, tPassword, tId)).thenThrow(Exception());
+      when(mockRemoteDataSource.signUp(tName, tEmail, tPassword)).thenThrow(Exception());
 
       // Act
       final result = await repository.signUp(
         name: tName,
         email: tEmail,
         password: tPassword,
-        id: tId,
       );
 
       // Assert
       expect(result, const Left(ServerFailure()));
       verify(mockNetworkInfo.isConnected);
-      verify(mockRemoteDataSource.signUp(tName, tEmail, tPassword, tId));
+      verify(mockRemoteDataSource.signUp(tName, tEmail, tPassword));
       verifyNoMoreInteractions(mockNetworkInfo);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });

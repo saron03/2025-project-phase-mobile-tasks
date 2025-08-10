@@ -57,14 +57,13 @@ class MockAuthRemoteDataSource extends _i1.Mock
     String? name,
     String? email,
     String? password,
-    String? id,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#signUp, [name, email, password, id]),
+            Invocation.method(#signUp, [name, email, password]),
             returnValue: _i4.Future<_i2.UserModel>.value(
               _FakeUserModel_0(
                 this,
-                Invocation.method(#signUp, [name, email, password, id]),
+                Invocation.method(#signUp, [name, email, password]),
               ),
             ),
           )

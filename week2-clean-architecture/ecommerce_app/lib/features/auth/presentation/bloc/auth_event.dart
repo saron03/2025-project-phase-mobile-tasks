@@ -12,13 +12,11 @@ class SignUpEvent extends AuthEvent {
   final String name;
   final String email;
   final String password;
-  final String id;
 
   SignUpEvent({
     required this.name,
     required this.email,
     required this.password,
-    required this.id,
   });
 }
 

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import 'core/di/injection_container.dart' as di;
-// Import your use cases from domain
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/domain/usecases/signup.dart';
@@ -13,16 +11,12 @@ import 'features/auth/presentation/pages/home_page.dart';
 import 'features/auth/presentation/pages/sign_in_page.dart';
 import 'features/auth/presentation/pages/sign_up_page.dart';
 import 'features/auth/presentation/pages/splash_page.dart';
-
-// Import your dependency injection (GetIt or manual)
-
+import 'features/product/presentation/bloc/product_bloc.dart';
+import 'features/product/presentation/bloc/product_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize dependencies
   await di.init();
-
 
   runApp(const MyApp());
 }
@@ -48,7 +42,19 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/home',
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) {
+            return BlocProvider(
+              create: (_) => ProductBloc(
+                insertProduct: di.sl(),
+                updateProduct: di.sl(),
+                deleteProduct: di.sl(),
+                getProduct: di.sl(),
+                getAllProducts: di.sl(),
+                inputConverter: di.sl(),
+              )..add(const LoadAllProductEvent()),
+              child: const HomePage(),
+            );
+          },
         ),
       ],
     );

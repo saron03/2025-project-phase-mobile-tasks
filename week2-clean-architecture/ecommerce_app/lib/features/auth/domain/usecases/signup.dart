@@ -13,13 +13,7 @@ class SignUp {
     required String name,
     required String email,
     required String password,
-    required String id,
   }) {
-    return repository.signUp(
-      name: name,
-      email: email,
-      password: password,
-      id: id,
-    );
+    return repository.signUp(name: name, email: email, password: password);
   }
 }

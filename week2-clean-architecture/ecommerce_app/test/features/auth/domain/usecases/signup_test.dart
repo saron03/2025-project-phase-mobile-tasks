@@ -27,7 +27,6 @@ void main() {
       name: name,
       email: email,
       password: password,
-      id: id,
     )).thenAnswer((_) async => const Right(user));
 
     // Act
@@ -35,7 +34,6 @@ void main() {
       name: name,
       email: email,
       password: password,
-      id: id,
     );
 
     // Assert
@@ -44,7 +42,6 @@ void main() {
       name: name,
       email: email,
       password: password,
-      id: id,
     )).called(1);
     verifyNoMoreInteractions(mockAuthRepository);
   });

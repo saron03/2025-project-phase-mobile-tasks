@@ -202,7 +202,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                               name: name,
                                               email: email,
                                               password: password,
-                                              id: '',
                                             ),
                                           );
                                     }

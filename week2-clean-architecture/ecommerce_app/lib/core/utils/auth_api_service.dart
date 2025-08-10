@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 class AuthApiService {
   final http.Client client;
 
-  static const String baseUrl = 'https://g5-flutter-learning-path-be-tvum.onrender.com/';
+  static const String baseUrl = 'https://g5-flutter-learning-path-be-tvum.onrender.com/api/v2';
 
   AuthApiService({required this.client});
 
@@ -13,7 +12,7 @@ class AuthApiService {
     required String password,
   }) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$baseUrl/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -21,20 +20,19 @@ class AuthApiService {
     return _handleResponse(response);
   }
 
+  // Updated: Removed `id` param and `_id` field in request payload
   Future<Map<String, dynamic>> register({
     required String name,
     required String email,
     required String password,
-    required String id,
   }) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/register'),
+      Uri.parse('$baseUrl/auth/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'name': name,
         'email': email,
         'password': password,
-        '_id': id,
       }),
     );
 

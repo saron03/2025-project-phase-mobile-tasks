@@ -25,7 +25,6 @@ void main() {
         name: name,
         email: email,
         password: password,
-        id: id,
       );
 
       // Act & Assert
@@ -33,7 +32,6 @@ void main() {
       expect(signUpEvent.name, equals(name));
       expect(signUpEvent.email, equals(email));
       expect(signUpEvent.password, equals(password));
-      expect(signUpEvent.id, equals(id));
     });
 
     test('LogoutEvent is an instance of AuthEvent', () {

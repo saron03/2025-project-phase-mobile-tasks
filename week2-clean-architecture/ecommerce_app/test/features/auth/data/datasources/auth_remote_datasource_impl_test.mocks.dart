@@ -62,14 +62,12 @@ class MockAuthApiService extends _i1.Mock implements _i3.AuthApiService {
     required String? name,
     required String? email,
     required String? password,
-    required String? id,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#register, [], {
               #name: name,
               #email: email,
               #password: password,
-              #id: id,
             }),
             returnValue: _i4.Future<Map<String, dynamic>>.value(
               <String, dynamic>{},

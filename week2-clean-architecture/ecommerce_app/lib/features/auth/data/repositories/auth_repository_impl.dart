@@ -31,16 +31,17 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
 
+  // Updated: removed `id` param and call without it
   @override
   Future<Either<Failure, User>> signUp({
     required String name,
     required String email,
     required String password,
-    required String id,
+    // removed required String id,
   }) async {
     try {
       if (await networkInfo.isConnected) {
-        final user = await remoteDataSource.signUp(name, email, password, id);
+        final user = await remoteDataSource.signUp(name, email, password);
         return Right(user);
       } else {
         return const Left(NetworkFailure());
@@ -52,11 +53,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    // Typically no return, but you can add logic if needed.
     try {
       await remoteDataSource.logout();
     } catch (e) {
-      // You may want to handle or log errors
       rethrow;
     }
   }

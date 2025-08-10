@@ -34,13 +34,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ));
   }
 
+  // Updated: Removed `id` from signUp call
   Future<void> _onSignUpEvent(SignUpEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final result = await signUp(
       name: event.name,
       email: event.email,
       password: event.password,
-      id: event.id,
+      // removed id: event.id,
     );
     emit(result.fold(
       (failure) => AuthError(_mapFailureToMessage(failure)),

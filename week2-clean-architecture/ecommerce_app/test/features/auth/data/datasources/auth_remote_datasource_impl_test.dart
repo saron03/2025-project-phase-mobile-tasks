@@ -44,15 +44,14 @@ void main() {
       when(mockApiService.register(
               name: anyNamed('name'),
               email: anyNamed('email'),
-              password: anyNamed('password'),
-              id: anyNamed('id')))
+              password: anyNamed('password'),))
           .thenAnswer((_) async => {
                 'data': {
                   'user': tUserJson,
                 },
               });
 
-      final result = await dataSource.signUp('Test User', 'test@example.com', '123456', '1');
+      final result = await dataSource.signUp('Test User', 'test@example.com', '123456');
 
       expect(result, isA<UserModel>());
       expect(result.email, 'test@example.com');

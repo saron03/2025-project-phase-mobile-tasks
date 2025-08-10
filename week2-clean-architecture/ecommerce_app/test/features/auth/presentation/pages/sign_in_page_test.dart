@@ -66,7 +66,7 @@ void main() {
   });
 
   // Helper to extract text from TextSpan
-  String _extractTextFromTextSpan(TextSpan span) {
+  String extractTextFromTextSpan(TextSpan span) {
     final buffer = StringBuffer();
     void extract(TextSpan s) {
       if (s.text != null) buffer.write(s.text);
@@ -93,7 +93,7 @@ void main() {
     expect(richTextFinder, findsWidgets, reason: 'RichText widgets should be present');
     final richTextWidget = tester.widget<RichText>(richTextFinder.last);
     final textSpan = richTextWidget.text as TextSpan;
-    final fullText = _extractTextFromTextSpan(textSpan);
+    final fullText = extractTextFromTextSpan(textSpan);
     debugPrint('RichText content: $fullText');
 
     // Scroll to make AuthTextLink visible
