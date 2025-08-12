@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/errors/failures.dart';
-import 'package:ecommerce_app/core/platform/netwrok_info.dart';
+import 'package:ecommerce_app/core/platform/network_info.dart';
 import 'package:ecommerce_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:ecommerce_app/features/auth/data/models/user_model.dart';
 import 'package:ecommerce_app/features/auth/data/repositories/auth_repository_impl.dart';

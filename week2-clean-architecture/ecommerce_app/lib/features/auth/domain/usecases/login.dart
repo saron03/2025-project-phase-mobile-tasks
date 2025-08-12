@@ -1,3 +1,4 @@
+// Your Login use case file
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../entities/user.dart';
@@ -11,10 +12,8 @@ class Login {
   Future<Either<Failure, User>> call({
     required String email,
     required String password,
-  }) {
-    return repository.login(email: email, password: password);
+  }) async {
+    // Await the repository's login method to ensure token is saved.
+    return await repository.login(email: email, password: password);
   }
 }
-
-
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'core/di/injection_container.dart' as di;
+import 'features/auth/domain/entities/user.dart';
 import 'features/auth/domain/usecases/login.dart';
 import 'features/auth/domain/usecases/logout.dart';
 import 'features/auth/domain/usecases/signup.dart';
@@ -11,6 +12,9 @@ import 'features/auth/presentation/pages/home_page.dart';
 import 'features/auth/presentation/pages/sign_in_page.dart';
 import 'features/auth/presentation/pages/sign_up_page.dart';
 import 'features/auth/presentation/pages/splash_page.dart';
+import 'features/chat/presentation/bloc/chat_bloc.dart';
+import 'features/chat/presentation/pages/chat_list_page.dart';
+import 'features/chat/presentation/pages/chat_messages_page.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/bloc/product_event.dart';
 
@@ -53,6 +57,34 @@ class MyApp extends StatelessWidget {
                 inputConverter: di.sl(),
               )..add(const LoadAllProductEvent()),
               child: const HomePage(),
+            );
+          },
+        ),
+        GoRoute(
+          path: '/chat-messages/:chatId',
+          builder: (context, state) {
+            final chatId = state.pathParameters['chatId']!;
+            final otherUser = state.extra as User?;
+
+            if (otherUser == null) {
+              return const Text('Error: User not found');
+            }
+            return BlocProvider(
+              create: (_) => di.sl<ChatBloc>(),
+              child: ChatMessagesPage(
+                chatId: chatId,
+                otherUser: otherUser,
+              ),
+            );
+          },
+        ),
+
+        GoRoute(
+          path: '/chat-list',
+          builder: (context, state) {
+            return BlocProvider(
+              create: (_) => di.sl<ChatBloc>(),
+              child: const ChatListPage(),
             );
           },
         ),

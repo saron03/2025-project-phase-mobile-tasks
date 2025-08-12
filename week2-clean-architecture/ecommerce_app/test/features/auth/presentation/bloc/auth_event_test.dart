@@ -20,7 +20,6 @@ void main() {
       const name = 'Test User';
       const email = 'test@example.com';
       const password = 'password123';
-      const id = '1';
       final signUpEvent = SignUpEvent(
         name: name,
         email: email,

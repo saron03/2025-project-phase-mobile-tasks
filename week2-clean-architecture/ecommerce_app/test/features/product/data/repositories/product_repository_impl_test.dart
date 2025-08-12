@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_app/core/errors/failures.dart';
-import 'package:ecommerce_app/core/platform/netwrok_info.dart';
+import 'package:ecommerce_app/core/platform/network_info.dart';
 import 'package:ecommerce_app/features/product/data/datasources/product_local_data_dource.dart' show ProductLocalDataSource;
 import 'package:ecommerce_app/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_app/features/product/data/models/product_model.dart';

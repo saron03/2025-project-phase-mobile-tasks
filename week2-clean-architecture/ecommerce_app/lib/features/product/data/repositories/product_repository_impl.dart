@@ -1,7 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
-import '../../../../core/platform/netwrok_info.dart';
+import '../../../../core/platform/network_info.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/product_repository.dart';
 import '../datasources/product_local_data_dource.dart';

@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/errors/failures.dart';
-import '../../domain/entities/user.dart';
+import '../../data/models/user_model.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/logout.dart';
 import '../../domain/usecases/signup.dart';
@@ -59,23 +61,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onCheckAuthStatusEvent(CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('auth_token');
-      debugPrint('Auth token: $token');
-      if (token != null && token.isNotEmpty) {
-        final user = const User(id: 'placeholder_id', name: 'Placeholder User', email: 'placeholder@example.com');
-        emit(AuthAuthenticated(user));
-      } else {
-        emit(AuthUnauthenticated());
-      }
-    } catch (e) {
-      debugPrint('CheckAuthStatus error: $e');
+Future<void> _onCheckAuthStatusEvent(CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
+  emit(AuthLoading());
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('authToken');
+    final userJson = prefs.getString('currentUser');
+    if (token != null && userJson != null) {
+      final user = UserModel.fromJson(jsonDecode(userJson));
+      emit(AuthAuthenticated(user));
+    } else {
       emit(AuthUnauthenticated());
     }
+  } catch (e) {
+    debugPrint('CheckAuthStatus error: $e');
+    emit(AuthUnauthenticated());
   }
+}
 
   String _mapFailureToMessage(Failure failure) {
     if (failure is NetworkFailure) {

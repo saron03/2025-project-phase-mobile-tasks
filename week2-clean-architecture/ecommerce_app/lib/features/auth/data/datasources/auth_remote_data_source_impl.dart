@@ -1,5 +1,6 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
+import '../../../../core/errors/exceptions.dart';
 import '../../../../core/utils/auth_api_service.dart';
 import '../models/user_model.dart';
 import 'auth_remote_data_source.dart';
@@ -9,38 +10,50 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   AuthRemoteDataSourceImpl({required this.apiService});
 
-@override
-Future<UserModel> login(String email, String password) async {
-  final json = await apiService.login(email: email, password: password);
-  final token = json['data']['access_token'];
+  @override
+  Future<UserModel> login(String email, String password) async {
+    try {
+      final responseData = await apiService.login(
+        email: email,
+        password: password,
+      );
+      final Map<String, dynamic> userData = responseData['data'];
+      return UserModel.fromJson(userData);
+    } catch (e) {
+      debugPrint('Login API call error: $e');
+      throw ServerException();
+    }
+  }
+  // In your AuthRemoteDataSourceImpl.dart file
 
-  // Save token for later use
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('auth_token', token);
-
-  // Create a user model placeholder if backend does not send user info
-  return UserModel(
-    id: 'unknown',
-    name: email.split('@')[0],  // Just use the email's first part as name
-    email: email,
-  );
-}
-
-
-  // Updated: Removed `id` param from signUp method
   @override
   Future<UserModel> signUp(String name, String email, String password) async {
-    final json = await apiService.register(
-      name: name,
-      email: email,
-      password: password,
-    );
-    // Updated here: changed json path from ['data']['user'] to ['data']
-    return UserModel.fromJson(json['data']);
+    try {
+      final responseData = await apiService.register(
+        name: name,
+        email: email,
+        password: password,
+      );
+       debugPrint('response: $responseData');
+      final Map<String, dynamic> userData = responseData['data'];
+
+      // The sign-up response does not include a token.
+      // We create a UserModel with the available data and an empty string for the token.
+      return UserModel(
+        id: userData['_id'] as String,
+        name: userData['name'] as String,
+        email: userData['email'] as String,
+        token:
+            '', // Safely handles the missing token by providing an empty string.
+      );
+    } catch (e) {
+      debugPrint('Sign-up API call error: $e');
+      throw ServerException();
+    }
   }
 
   @override
   Future<void> logout() async {
-    return;
+    // This is fine.
   }
 }

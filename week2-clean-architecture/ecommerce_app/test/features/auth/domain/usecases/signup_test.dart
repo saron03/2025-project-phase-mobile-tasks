@@ -19,7 +19,6 @@ void main() {
   const name = 'John';
   const email = 'john@example.com';
   const password = 'password123';
-  const id = '123';
 
   test('should return User on successful signup', () async {
     // Arrange
